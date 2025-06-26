@@ -8,7 +8,25 @@
 
         <img src="{{ url_for('video') }}" width="80%"/>
     </div>
-            
+    <video id="webcamVideo" autoplay></video>
+     
+    <script>
+      const webcamVideo=document.getElementById("webcamVideo");
+      const constraints = {
+        video: {
+          width: 1280,
+          height: 720,
+          facingMode: "enviornment",
+        }
+      }
+
+
+      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+        webcamVideo.srcObject = stream;
+      }).catch((error) => {
+        console.error(error);
+      })
+    </script>
     </body>
 
 
