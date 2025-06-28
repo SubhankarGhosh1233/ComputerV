@@ -1,9 +1,18 @@
 from flask import Flask,render_template,Response
 import cv2
+import base64
+import numpy as np
+from flask import request
 
 app=Flask(__name__)
-camera=cv2.VideoCapture(0)
+# camera=cv2.VideoCapture(0)
 
+@app.route('/process_frame', methods=['POST'])
+def process_frame():
+    data = request.json['image']
+    encoded_data = data.split(',')[1]
+    nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
+    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 def generate_frames():
     while True:
             
