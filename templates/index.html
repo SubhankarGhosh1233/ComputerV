@@ -11,21 +11,22 @@
     <video id="webcamVideo" autoplay></video>
      
     <script>
-      const webcamVideo=document.getElementById("webcamVideo");
-      const constraints = {
-        video: {
-          width: 1280,
-          height: 720,
-          facingMode: "user",
-        }
-      }
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        
+        setInterval(() => {
+          canvas.width = webcamVideo.videoWidth;
+          canvas.height = webcamVideo.videoHeight;
+          context.drawImage(webcamVideo, 0, 0);
+          const imageData = canvas.toDataURL('image/jpeg');
+        
+          fetch('/process_frame', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: imageData })
+          });
+        }, 1000); // Send a frame every second
 
-
-      navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-        webcamVideo.srcObject = stream;
-      }).catch((error) => {
-        console.error(error);
-      })
     </script>
     </body>
 
